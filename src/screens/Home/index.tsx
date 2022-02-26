@@ -1,5 +1,4 @@
 import React from 'react'
-import { StatusBar } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
 
 import { Car } from '../../components/Car'
@@ -37,11 +36,6 @@ export function Home() {
 
   return (
     <Container>
-      <StatusBar
-        barStyle='light-content'
-        backgroundColor='transparent'
-        translucent
-      />
       <Header>
         <HeaderContent>
           <Logo

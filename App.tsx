@@ -1,6 +1,10 @@
 import React from 'react'
 import AppLoading from 'expo-app-loading'
 import { ThemeProvider } from 'styled-components'
+import { StatusBar } from 'react-native'
+
+import { Scheduling } from './src/screens/Scheduling'
+import theme from './src/styles/theme'
 
 import {
   useFonts,
@@ -14,8 +18,6 @@ import {
   Archivo_600SemiBold
 } from '@expo-google-fonts/archivo'
 
-import { CarDetails } from './src/screens/CarDetails'
-import theme from './src/styles/theme'
 
 export default function App(): JSX.Element {
   const [fontsLoaded] = useFonts({
@@ -32,7 +34,12 @@ export default function App(): JSX.Element {
 
   return (
     <ThemeProvider theme={theme}>
-    <CarDetails />
+      <StatusBar
+        barStyle='light-content'
+        backgroundColor='transparent'
+        translucent
+      />
+      <Scheduling />
     </ThemeProvider>
   )
 }
