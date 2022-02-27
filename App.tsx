@@ -3,7 +3,7 @@ import AppLoading from 'expo-app-loading'
 import { ThemeProvider } from 'styled-components'
 import { StatusBar } from 'react-native'
 
-import { Scheduling } from './src/screens/Scheduling'
+import { SchedulingDetails } from './src/screens/SchedulingDetails'
 import theme from './src/styles/theme'
 
 import {
@@ -39,7 +39,7 @@ export default function App(): JSX.Element {
         backgroundColor='transparent'
         translucent
       />
-      <Scheduling />
+      <SchedulingDetails />
     </ThemeProvider>
   )
 }
