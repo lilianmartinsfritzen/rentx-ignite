@@ -2,6 +2,8 @@ import React from 'react'
 import { useTheme } from 'styled-components'
 
 import { BackButton } from '../../components/BackButton'
+import { Button } from '../../components/Button'
+import { Calendar } from '../../components/Calendar'
 
 import ArrowSvg from '../../assets/arrow.svg'
 
@@ -13,7 +15,10 @@ import {
   DateInfo,
   DateTitle,
   DateValue,
+  Content,
+  Footer,
 } from './styles'
+
 
 export function Scheduling() {
   const theme = useTheme()
@@ -54,8 +59,15 @@ export function Scheduling() {
             </DateValue>
           </DateInfo>
         </RentalPeriod>
-
       </Header>
+
+      <Content>
+        <Calendar />
+      </Content>
+
+      <Footer>
+        <Button title='Confirmar' />
+      </Footer>
     </Container>
   )
 }

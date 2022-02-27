@@ -3,7 +3,7 @@ import AppLoading from 'expo-app-loading'
 import { ThemeProvider } from 'styled-components'
 import { StatusBar } from 'react-native'
 
-import { Scheduling } from './src/screens/Scheduling'
+import { SchedulingComplete } from './src/screens/SchedulingComplete'
 import theme from './src/styles/theme'
 
 import {
@@ -34,12 +34,7 @@ export default function App(): JSX.Element {
 
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar
-        barStyle='light-content'
-        backgroundColor='transparent'
-        translucent
-      />
-      <Scheduling />
+      <SchedulingComplete />
     </ThemeProvider>
   )
 }
