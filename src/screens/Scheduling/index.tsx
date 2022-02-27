@@ -13,7 +13,10 @@ import {
   DateInfo,
   DateTitle,
   DateValue,
+  Content,
+  Footer,
 } from './styles'
+import { Button } from '../../components/Button'
 
 export function Scheduling() {
   const theme = useTheme()
@@ -54,8 +57,15 @@ export function Scheduling() {
             </DateValue>
           </DateInfo>
         </RentalPeriod>
-
       </Header>
+
+      <Content>
+
+      </Content>
+
+      <Footer>
+        <Button title='Confirmar' />
+      </Footer>
     </Container>
   )
 }
