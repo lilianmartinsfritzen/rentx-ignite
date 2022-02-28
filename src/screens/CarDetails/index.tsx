@@ -1,4 +1,6 @@
 import React from 'react'
+import { useNavigation, CommonActions } from '@react-navigation/native'
+
 import { BackButton } from '../../components/BackButton'
 import { ImageSlider } from '../../components/ImageSlider'
 import { Accessory } from '../../components/Accessory'
@@ -29,6 +31,16 @@ import {
 } from './styles'
 
 export function CarDetails() {
+  const navigation = useNavigation()
+
+  function handleChoosePeriod() {
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'Scheduling'
+      })
+    )
+  }
+
   return (
     <Container>
       <Header>
@@ -67,21 +79,12 @@ export function CarDetails() {
           indultado na praça Real Maestranza de Sevilla. É um belíssimo carro
           para quem gosta de acelerar.
         </About>
-        <About>
-          Este é automóvel desportivo. Surgiu do lendário touro de lide
-          indultado na praça Real Maestranza de Sevilla. É um belíssimo carro
-          para quem gosta de acelerar.
-        </About>
-        <About>
-          Este é automóvel desportivo. Surgiu do lendário touro de lide
-          indultado na praça Real Maestranza de Sevilla. É um belíssimo carro
-          para quem gosta de acelerar.
-        </About>
       </Content>
 
       <Footer>
         <Button
-          title='Escolher período do aluguel'          
+          title='Escolher período do aluguel'
+          onPress={handleChoosePeriod}
         />
       </Footer>
 

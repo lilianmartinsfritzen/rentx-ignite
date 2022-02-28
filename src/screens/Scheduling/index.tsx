@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTheme } from 'styled-components'
+import { useNavigation, CommonActions } from '@react-navigation/native'
 
 import { BackButton } from '../../components/BackButton'
 import { Button } from '../../components/Button'
@@ -19,9 +20,17 @@ import {
   Footer,
 } from './styles'
 
-
 export function Scheduling() {
   const theme = useTheme()
+  const navigation = useNavigation()
+
+  function handleScheduling() {
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'SchedulingDetails'
+      })
+    )
+  }
 
   return (
     <Container>
@@ -66,7 +75,7 @@ export function Scheduling() {
       </Content>
 
       <Footer>
-        <Button title='Confirmar' />
+        <Button title='Confirmar' onPress={handleScheduling} />
       </Footer>
     </Container>
   )

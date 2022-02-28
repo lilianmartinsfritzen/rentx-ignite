@@ -1,5 +1,6 @@
 import React from 'react'
 import { RFValue } from 'react-native-responsive-fontsize'
+import { useNavigation, CommonActions } from '@react-navigation/native'
 
 import { Car } from '../../components/Car'
 
@@ -14,6 +15,8 @@ import {
 } from './styles'
 
 export function Home() {
+  const navigation = useNavigation()
+
   const carData = {
     brand: 'audi',
     name: 'RS 5 Coupé',
@@ -24,15 +27,13 @@ export function Home() {
     thumbnail: 'https://freepngimg.com/thumb/audi/35227-5-audi-rs5-red.png'
   }
 
-  // const carDataTwo = {
-  //   brand: 'porsche',
-  //   name: 'Panamera',
-  //   rent: {
-  //     period: 'ao dia',
-  //     price: 340
-  //   },
-  //   thumbnail: 'https://www.pngkit.com/png/full/237-2375888_porsche-panamera-s.png'
-  // }
+  function handleCarDetails() {
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'CarDetails'  
+      })
+    )
+  }
 
   return (
     <Container>
@@ -51,7 +52,7 @@ export function Home() {
       <CarList 
         data={[1,2,3,4,5,6,7]}
         keyExtractor={item => String(item)}
-        renderItem={({ item }) => <Car data={carData}/>}
+        renderItem={({ item }) => <Car data={carData} onPress={handleCarDetails} />}
       />
 
     </Container>
