@@ -1,4 +1,5 @@
 import React from 'react'
+import { StatusBar } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { useNavigation, CommonActions } from '@react-navigation/native'
 
@@ -30,13 +31,18 @@ export function Home() {
   function handleCarDetails() {
     navigation.dispatch(
       CommonActions.navigate({
-        name: 'CarDetails'  
+        name: 'CarDetails'
       })
     )
   }
 
   return (
     <Container>
+      <StatusBar
+        barStyle='light-content'
+        backgroundColor='transparent'
+        translucent
+      />
       <Header>
         <HeaderContent>
           <Logo
@@ -49,8 +55,8 @@ export function Home() {
         </HeaderContent>
       </Header>
 
-      <CarList 
-        data={[1,2,3,4,5,6,7]}
+      <CarList
+        data={[1, 2, 3, 4, 5, 6, 7]}
         keyExtractor={item => String(item)}
         renderItem={({ item }) => <Car data={carData} onPress={handleCarDetails} />}
       />
