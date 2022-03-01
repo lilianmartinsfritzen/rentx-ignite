@@ -109,7 +109,6 @@ export function Scheduling() {
         <BackButton
           onPress={handleBack}
           color={theme.colors.shape}
-        // style={{ marginTop: 49 }}
         />
 
         <Title>
@@ -149,7 +148,11 @@ export function Scheduling() {
       </Content>
 
       <Footer>
-        <Button title='Confirmar' onPress={handleScheduling} />
+        <Button 
+          title='Confirmar' 
+          onPress={handleScheduling}
+          enabled={!!rentalPeriod.startFormatted}
+        />
       </Footer>
     </Container>
   )

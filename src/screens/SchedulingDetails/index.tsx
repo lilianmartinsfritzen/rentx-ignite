@@ -43,6 +43,7 @@ import {
   RentalPriceQuota,
   RentalPriceTotal,
 } from './styles'
+import { Load } from '../../components/Load'
 
 interface Params {
   car: CarDTO
@@ -63,11 +64,13 @@ export function SchedulingDetails() {
   const theme = useTheme()
   const navigation = useNavigation()
   const route = useRoute()
-  const { car, dates } = route.params as Params
+  const [loading, setLoading] = useState(true)
 
+  const { car, dates } = route.params as Params
   const rentTotal = Number(dates.length * car.rent.price)
 
   async function handleRentNow() {
+    setLoading(true)
     const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`)
 
     const unavailable_dates = [
@@ -91,7 +94,10 @@ export function SchedulingDetails() {
           name: 'SchedulingComplete'
         })
       )
-    ).catch(() => Alert.alert('Não foi possível confirmar o agendamento.'))
+    ).catch(() => {
+      setLoading(false)
+      Alert.alert('Não foi possível confirmar o agendamento.')
+    })
   }
 
   function handleBack() {
@@ -103,6 +109,7 @@ export function SchedulingDetails() {
       start: format(getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
       end: format(getPlatformDate(new Date(dates[dates.length - 1])), 'dd/MM/yyyy')
     })
+    setLoading(false)
   },[])
 
   return (
@@ -182,6 +189,8 @@ export function SchedulingDetails() {
           title='Alugar agora'
           color={theme.colors.success}
           onPress={handleRentNow}
+          enabled={!loading}
+          loading={loading}
         />
       </Footer>
 

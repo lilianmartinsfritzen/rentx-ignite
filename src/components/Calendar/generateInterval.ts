@@ -28,6 +28,5 @@ export function generateInterval(
     }
   })
 
-  console.log(interval)
   return interval
 }
