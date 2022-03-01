@@ -23,20 +23,13 @@ export function Home() {
   const [loading, setLoading] = useState(true)
   const navigation = useNavigation()
 
-  const carData = {
-    brand: 'audi',
-    name: 'RS 5 Coupé',
-    rent: {
-      period: 'ao dia',
-      price: 120
-    },
-    thumbnail: 'https://freepngimg.com/thumb/audi/35227-5-audi-rs5-red.png'
-  }
-
-  function handleCarDetails() {
+  function handleCarDetails(car: CarDTO) {
     navigation.dispatch(
       CommonActions.navigate({
-        name: 'CarDetails'
+        name: 'CarDetails',
+        params: {
+          car
+        }
       })
     )
   }
@@ -78,7 +71,9 @@ export function Home() {
         <CarList
           data={cars}
           keyExtractor={item => item.id}
-          renderItem={({ item }) => <Car data={item} onPress={handleCarDetails} />}
+          renderItem={({ item }) =>
+            <Car data={item} onPress={() => handleCarDetails(item)} />
+          }
         />
       }
     </Container>
