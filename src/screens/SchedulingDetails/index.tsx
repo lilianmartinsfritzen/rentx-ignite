@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { CommonActions, useNavigation, useRoute } from '@react-navigation/native'
+import { Alert } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
+import { CommonActions, useNavigation, useRoute } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 import { useTheme } from 'styled-components'
+import { format } from 'date-fns'
 
 import { BackButton } from '../../components/BackButton'
 import { ImageSlider } from '../../components/ImageSlider'
 import { Accessory } from '../../components/Accessory'
 import { Button } from '../../components/Button'
 
+import { getAccessoryIcon } from '../../utils/getAccessoryIcon'
+import { getPlatformDate } from '../../utils/getPlatformDate'
+
 import { CarDTO } from '../../dtos/carDTO'
 
-import { getAccessoryIcon } from '../../utils/getAccessoryIcon'
+import api from '../../services/api'
 
 import {
   Container,
@@ -38,8 +43,6 @@ import {
   RentalPriceQuota,
   RentalPriceTotal,
 } from './styles'
-import { format } from 'date-fns'
-import { getPlatformDate } from '../../utils/getPlatformDate'
 
 interface Params {
   car: CarDTO
@@ -64,12 +67,24 @@ export function SchedulingDetails() {
 
   const rentTotal = Number(dates.length * car.rent.price)
 
-  function handleRentNow() {
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'SchedulingComplete'
-      })
-    )
+  async function handleRentNow() {
+    const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`)
+
+    const unavailable_dates = [
+      ...schedulesByCar.data.unavailable_dates,
+      ...dates
+    ]
+
+    await api.put(`/schedules_bycars/${car.id}`, {
+      id: car.id,
+      unavailable_dates
+    }).then(() => 
+      navigation.dispatch(
+        CommonActions.navigate({
+          name: 'SchedulingComplete'
+        })
+      )
+    ).catch(() => Alert.alert('Não foi possível confirmar o agendamento.'))
   }
 
   function handleBack() {
