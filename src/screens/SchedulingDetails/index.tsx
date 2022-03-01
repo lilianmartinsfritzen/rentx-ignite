@@ -2,6 +2,7 @@ import React from 'react'
 import { Feather } from '@expo/vector-icons'
 
 import { useTheme } from 'styled-components'
+import { CommonActions, useNavigation } from '@react-navigation/native'
 
 import { BackButton } from '../../components/BackButton'
 import { ImageSlider } from '../../components/ImageSlider'
@@ -44,11 +45,24 @@ import { RFValue } from 'react-native-responsive-fontsize'
 
 export function SchedulingDetails() {
   const theme = useTheme()
+  const navigation = useNavigation()
+
+  function handleRentNow() {
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'SchedulingComplete'
+      })
+    )
+  }
+
+  function handleBack() {
+    navigation.goBack()
+  }
 
   return (
     <Container>
       <Header>
-        <BackButton onPress={() => { }} />
+        <BackButton onPress={handleBack} />
       </Header>
       <CarImages>
         <ImageSlider
@@ -116,7 +130,9 @@ export function SchedulingDetails() {
 
       <Footer>
         <Button
-          title='Confirmar'
+          title='Alugar agora'
+          color={theme.colors.success}
+          onPress={handleRentNow}
         />
       </Footer>
 
