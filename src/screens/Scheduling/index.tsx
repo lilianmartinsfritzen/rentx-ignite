@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import { Alert } from 'react-native'
 import { useTheme } from 'styled-components'
-import { useNavigation, CommonActions } from '@react-navigation/native'
+import { useNavigation, CommonActions, useRoute } from '@react-navigation/native'
 import { format } from 'date-fns'
 
 import { BackButton } from '../../components/BackButton'
@@ -13,6 +14,8 @@ import {
 } from '../../components/Calendar'
 
 import ArrowSvg from '../../assets/arrow.svg'
+import { getPlatformDate } from '../../utils/getPlatformDate'
+import { CarDTO } from '../../dtos/carDTO'
 
 import {
   Container,
@@ -25,13 +28,14 @@ import {
   Content,
   Footer,
 } from './styles'
-import { getPlatformDate } from '../../utils/getPlatformDate'
 
 interface RentalPeriod {
-  start: number
   startFormatted: string
-  end: number
   endFormatted: string
+}
+
+interface Params {
+  car: CarDTO
 }
 
 export function Scheduling() {
@@ -52,13 +56,23 @@ export function Scheduling() {
 
   const theme = useTheme()
   const navigation = useNavigation()
+  const route = useRoute()
+  const { car } = route.params as Params
 
   function handleScheduling() {
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'SchedulingDetails'
-      })
-    )
+    if(!rentalPeriod.startFormatted || !rentalPeriod.endFormatted) {
+      Alert.alert('Selecione o intervalo para alugar.')
+    } else {
+      navigation.dispatch(
+        CommonActions.navigate({
+          name: 'SchedulingDetails',
+          params: {
+            car,
+            dates: Object.keys(markedDates)
+          }
+        })
+      )
+    }
   }
 
   function handleBack() {
@@ -84,8 +98,6 @@ export function Scheduling() {
     const endDate = Object.keys(interval)[Object.keys(interval).length - 1]
 
     setRentalPeriod({
-      start: start.timestamp,
-      end: end.timestamp,
       startFormatted: format(getPlatformDate(new Date(firstDate)), 'dd/MM/yyyy'),
       endFormatted: format(getPlatformDate(new Date(endDate)), 'dd/MM/yyyy')
     })
