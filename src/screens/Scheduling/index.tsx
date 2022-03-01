@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useTheme } from 'styled-components'
 import { useNavigation, CommonActions } from '@react-navigation/native'
+import { format } from 'date-fns'
 
 import { BackButton } from '../../components/BackButton'
 import { Button } from '../../components/Button'
@@ -24,6 +25,14 @@ import {
   Content,
   Footer,
 } from './styles'
+import { getPlatformDate } from '../../utils/getPlatformDate'
+
+interface RentalPeriod {
+  start: number
+  startFormatted: string
+  end: number
+  endFormatted: string
+}
 
 export function Scheduling() {
   const [
@@ -35,6 +44,11 @@ export function Scheduling() {
     markedDates, 
     setMarkedDates
   ] = useState<MarkedDateProps>({} as MarkedDateProps)
+
+  const [
+    rentalPeriod, 
+    setRentalPeriod
+  ] = useState<RentalPeriod>({} as RentalPeriod)
 
   const theme = useTheme()
   const navigation = useNavigation()
@@ -66,7 +80,15 @@ export function Scheduling() {
     const interval = generateInterval(start, end)
     setMarkedDates(interval)
 
-    console.log(markedDates)
+    const firstDate = Object.keys(interval)[0]
+    const endDate = Object.keys(interval)[Object.keys(interval).length - 1]
+
+    setRentalPeriod({
+      start: start.timestamp,
+      end: end.timestamp,
+      startFormatted: format(getPlatformDate(new Date(firstDate)), 'dd/MM/yyyy'),
+      endFormatted: format(getPlatformDate(new Date(endDate)), 'dd/MM/yyyy')
+    })
   }
 
   return (
@@ -88,9 +110,9 @@ export function Scheduling() {
           <DateInfo>
             <DateTitle>DE</DateTitle>
             <DateValue
-              selected={false}
+              selected={!!rentalPeriod.startFormatted}
             >
-              18/06/2021
+              {rentalPeriod.startFormatted}
             </DateValue>
           </DateInfo>
 
@@ -99,9 +121,9 @@ export function Scheduling() {
           <DateInfo>
             <DateTitle>ATÉ</DateTitle>
             <DateValue
-              selected={false}
+              selected={!!rentalPeriod.endFormatted}
             >
-              20/06/2021
+              {rentalPeriod.endFormatted}
             </DateValue>
           </DateInfo>
         </RentalPeriod>
