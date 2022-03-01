@@ -14,6 +14,7 @@ import {
   Footer
 } from './styles'
 import { CommonActions, useNavigation } from '@react-navigation/native'
+import { BackButton } from '../../components/BackButton'
 
 export function SchedulingComplete() {
   const { width } = useWindowDimensions()
@@ -34,6 +35,7 @@ export function SchedulingComplete() {
         backgroundColor='transparent'
         translucent
       />
+
       <LogoSvg width={width} />
 
       <Content>
@@ -48,9 +50,9 @@ export function SchedulingComplete() {
       </Content>
 
       <Footer>
-        <ConfirmButton 
+        <ConfirmButton
           title='Ok'
-          onPress={handleConfirm}  
+          onPress={handleConfirm}
         />
       </Footer>
 

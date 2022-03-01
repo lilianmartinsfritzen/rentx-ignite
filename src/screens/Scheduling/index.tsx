@@ -32,11 +32,15 @@ export function Scheduling() {
     )
   }
 
+  function handleBack() {
+    navigation.goBack()
+  }
+
   return (
     <Container>
       <Header>
         <BackButton
-          onPress={() => { }}
+          onPress={handleBack}
           color={theme.colors.shape}
         // style={{ marginTop: 49 }}
         />
