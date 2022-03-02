@@ -6,9 +6,9 @@ import { format } from 'date-fns'
 
 import { BackButton } from '../../components/BackButton'
 import { Button } from '../../components/Button'
-import { 
-  Calendar, 
-  DayProps, 
+import {
+  Calendar,
+  DayProps,
   generateInterval,
   MarkedDateProps
 } from '../../components/Calendar'
@@ -40,17 +40,17 @@ interface Params {
 
 export function Scheduling() {
   const [
-    lastSelectedDate, 
+    lastSelectedDate,
     setLastSelectedDate
   ] = useState<DayProps>({} as DayProps)
 
   const [
-    markedDates, 
+    markedDates,
     setMarkedDates
   ] = useState<MarkedDateProps>({} as MarkedDateProps)
 
   const [
-    rentalPeriod, 
+    rentalPeriod,
     setRentalPeriod
   ] = useState<RentalPeriod>({} as RentalPeriod)
 
@@ -60,19 +60,15 @@ export function Scheduling() {
   const { car } = route.params as Params
 
   function handleScheduling() {
-    if(!rentalPeriod.startFormatted || !rentalPeriod.endFormatted) {
-      Alert.alert('Selecione o intervalo para alugar.')
-    } else {
-      navigation.dispatch(
-        CommonActions.navigate({
-          name: 'SchedulingDetails',
-          params: {
-            car,
-            dates: Object.keys(markedDates)
-          }
-        })
-      )
-    }
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'SchedulingDetails',
+        params: {
+          car,
+          dates: Object.keys(markedDates)
+        }
+      })
+    )
   }
 
   function handleBack() {
@@ -141,15 +137,15 @@ export function Scheduling() {
       </Header>
 
       <Content>
-        <Calendar 
+        <Calendar
           markedDates={markedDates}
           onDayPress={handleChangeDate}
         />
       </Content>
 
       <Footer>
-        <Button 
-          title='Confirmar' 
+        <Button
+          title='Confirmar'
           onPress={handleScheduling}
           enabled={!!rentalPeriod.startFormatted}
         />
