@@ -4,6 +4,7 @@ import { RectButton, RectButtonProps } from 'react-native-gesture-handler'
 
 interface ButtonProps extends RectButtonProps {
   color?: string
+  enabled?: boolean
 }
 
 export const Container = styled(RectButton)<ButtonProps>`

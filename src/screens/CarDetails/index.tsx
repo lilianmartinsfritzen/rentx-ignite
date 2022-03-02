@@ -38,7 +38,10 @@ export function CarDetails() {
   function handleChoosePeriod() {
     navigation.dispatch(
       CommonActions.navigate({
-        name: 'Scheduling'
+        name: 'Scheduling',
+        params: {
+          car
+        }
       })
     )
   }
