@@ -1,5 +1,6 @@
 import React from 'react'
 import { StatusBar, useWindowDimensions } from 'react-native'
+import { CommonActions, useNavigation } from '@react-navigation/native'
 
 import { ConfirmButton } from '../../components/ConfirmButton'
 
@@ -13,8 +14,6 @@ import {
   Message,
   Footer
 } from './styles'
-import { CommonActions, useNavigation } from '@react-navigation/native'
-import { BackButton } from '../../components/BackButton'
 
 export function SchedulingComplete() {
   const { width } = useWindowDimensions()
