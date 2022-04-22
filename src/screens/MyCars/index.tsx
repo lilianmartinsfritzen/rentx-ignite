@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { AntDesign } from '@expo/vector-icons'
 
 import { Car } from '../../components/Car'
+import { LoadAnimation } from '../../components/LoadAnimation'
 import { BackButton } from '../../components/BackButton'
 
 import api from '../../services/api'
@@ -25,7 +26,6 @@ import {
   CarFooterDate,
   CarFooterPeriod,
 } from './styles'
-import { Load } from '../../components/Load'
 
 interface CarProps {
   id: string
@@ -84,7 +84,7 @@ export function MyCars() {
         </SubTitle>
 
       </Header>
-      {loading ? <Load /> :
+      {loading ? <LoadAnimation /> :
         <Content>
           <Appointments>
             <AppointmentsTitle>Agendamentos feitos</AppointmentsTitle>

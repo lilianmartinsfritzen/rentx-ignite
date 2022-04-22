@@ -14,7 +14,7 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import { Car } from '../../components/Car'
-import { Load } from '../../components/Load'
+import { LoadAnimation } from '../../components/LoadAnimation'
 
 import { CarDTO } from '../../dtos/carDTO'
 import api from '../../services/api'
@@ -125,7 +125,7 @@ export function Home() {
           }
         </HeaderContent>
       </Header>
-      {loading ? <Load /> :
+      {loading ? <LoadAnimation /> :
         <CarList
           data={cars}
           keyExtractor={item => item.id}
