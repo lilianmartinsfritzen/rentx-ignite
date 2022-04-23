@@ -1,6 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { SignIn } from '../screens/SignIn'
 import { Splash } from '../screens/Splash'
 import { Home } from '../screens/Home'
 import { MyCars } from '../screens/MyCars'
@@ -15,11 +16,11 @@ export function StackRoutes() {
   return (
     <Navigator 
       screenOptions={{ headerShown: false }}
-      initialRouteName="Splash"
+      initialRouteName="SignIn"
     >
       <Screen
-        name='Splash'
-        component={Splash}
+        name='SignIn'
+        component={SignIn}
       />
       <Screen
         name='Home'
