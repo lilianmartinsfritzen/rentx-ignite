@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import { 
   StatusBar,
   KeyboardAvoidingView,
@@ -7,6 +8,7 @@ import {
   Alert
 } from 'react-native'
 
+import { CommonActions, useNavigation } from '@react-navigation/native'
 import * as Yup from 'yup'
 
 import { Input } from '../../components/Input'
@@ -27,6 +29,8 @@ export function SignIn() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const navigation = useNavigation()
 
   async function handleSignIn() {
     try {
@@ -52,6 +56,14 @@ export function SignIn() {
         )
       }
     }
+  }
+
+  function handleNewAccount() {
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'SignUpFirstStep'
+      })
+    )
   }
 
   return (
@@ -106,8 +118,8 @@ export function SignIn() {
               title='Criar conta gratuita'
               color={theme.colors.background_secondary}
               light
-              onPress={() => {}}
-              enabled={false}
+              onPress={handleNewAccount}
+              enabled={true}
               loading={false}
             />
           </Footer>
