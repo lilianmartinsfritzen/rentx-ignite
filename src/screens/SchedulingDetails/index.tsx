@@ -43,7 +43,6 @@ import {
   RentalPriceQuota,
   RentalPriceTotal,
 } from './styles'
-import { Load } from '../../components/Load'
 
 interface Params {
   car: CarDTO
@@ -91,7 +90,12 @@ export function SchedulingDetails() {
     }).then(() => 
       navigation.dispatch(
         CommonActions.navigate({
-          name: 'SchedulingComplete'
+          name: 'Confirmation',
+          params: {
+            nextScreenRoute: 'Home',
+            title: 'Carro alugado!',
+            message: `Agora você só precisar ir\naté a concessionária RENTX\npegar seu automóvel.`
+          }
         })
       )
     ).catch(() => {
