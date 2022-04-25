@@ -12,6 +12,8 @@
   "dependencies": {
     "@expo-google-fonts/archivo": "^0.2.2",
     "@expo-google-fonts/inter": "^0.2.2",
+    "@nozbe/watermelondb": "^0.24.0",
+    "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.0",
     "axios": "^0.26.0",
@@ -39,6 +41,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@babel/plugin-proposal-decorators": "^7.17.9",
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.64.12",
     "@types/styled-components-react-native": "^5.1.3",

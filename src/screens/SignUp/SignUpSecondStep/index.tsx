@@ -10,6 +10,8 @@ import {
 import { useTheme } from 'styled-components'
 import { CommonActions, useNavigation, useRoute } from '@react-navigation/native'
 
+import api from '../../../services/api'
+
 import { Bullet } from '../../../components/Bullet'
 import { Button } from '../../../components/Button'
 import { BackButton } from '../../../components/BackButton'
@@ -47,7 +49,7 @@ export function SignUpSecondStep() {
     navigation.goBack()
   }
 
-  function handleRegister() {
+  async function handleRegister() {
     if(!password || !passwordConfirm) {
       return Alert.alert('Informe a senha e a confirmação')
     }
@@ -56,16 +58,28 @@ export function SignUpSecondStep() {
       return Alert.alert('As senhas não são iguais')
     }
 
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'Confirmation',
-        params: {
-          nextScreenRoute: 'SignIn',
-          title: 'Conta criada!',
-          message: `Agora é só fazer login \n e aproveitar.`
-        }
-      })
-    )
+    await api.post('/users', {
+      name: user.name,
+      email: user.email,
+      driver_license: user.driverLicense,
+      password
+    })
+    .then(() => {
+      navigation.dispatch(
+        CommonActions.navigate({
+          name: 'Confirmation',
+          params: {
+            nextScreenRoute: 'SignIn',
+            title: 'Conta criada!',
+            message: `Agora é só fazer login \n e aproveitar.`
+          }
+        })
+      )
+    }).catch(() => {
+      Alert.alert('Opa', 'Não foi possível realizar o cadastro')
+    })
+
+
 
   }
 

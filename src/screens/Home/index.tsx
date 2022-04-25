@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StatusBar, StyleSheet, BackHandler } from 'react-native'
+import { StatusBar, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { RectButton, PanGestureHandler } from 'react-native-gesture-handler'
@@ -84,24 +84,27 @@ export function Home() {
   }
 
   useEffect(() => {
+    let isMounted = true
+
     async function fetchCars() {
       try {
         const response = await api.get('/cars')
-        setCars(response.data)
+        if(isMounted) {
+          setCars(response.data)
+        }
       } catch (error) {
         console.log(error)
       } finally {
-        setLoading(false)
+        if(isMounted) {
+          setLoading(false)
+        }
       }
     }
 
     fetchCars()
-  }, [])
-
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      return true
-    })
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   return (
