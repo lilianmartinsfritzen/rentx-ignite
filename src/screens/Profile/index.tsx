@@ -35,7 +35,7 @@ import {
 } from './styles'
 
 export function Profile() {
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
   const theme = useTheme()
   const navigation = useNavigation()
 
@@ -46,10 +46,6 @@ export function Profile() {
 
   function handleBack() {
     navigation.goBack()
-  }
-
-  function handleSignOut() {
-
   }
 
   function handleOptionChange(optionSelected: 'dataEdit' | 'passwordEdit') {
@@ -91,7 +87,7 @@ export function Profile() {
               />
               <HeaderTitle>Editar Perfil</HeaderTitle>
               <LogoutButton 
-                onPress={handleSignOut}
+                onPress={signOut}
               >
                 <Feather 
                   name='power'
