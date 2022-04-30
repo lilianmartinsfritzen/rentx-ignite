@@ -48,7 +48,6 @@ export function SignIn() {
       })
   
       await schema.validate({ email, password })
-      Alert.alert('Tudo certo!')
 
       signIn({ email, password })
       

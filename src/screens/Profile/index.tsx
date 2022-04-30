@@ -8,6 +8,8 @@ import {
 import { useNavigation } from '@react-navigation/native'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 
+import * as ImagePicker from 'expo-image-picker'
+
 import { useAuth } from '../../hooks/auth'
 import { useTheme } from 'styled-components'
 import { Feather } from '@expo/vector-icons'
@@ -33,12 +35,14 @@ import {
 } from './styles'
 
 export function Profile() {
-  const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit')
-
   const { user } = useAuth()
-
   const theme = useTheme()
   const navigation = useNavigation()
+
+  const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit')
+  const [avatar, setAvatar] = useState(user.avatar)
+  const [name, setName] = useState(user.name)
+  const [driverLicense, setDriverLicense] = useState(user.driver_license)
 
   function handleBack() {
     navigation.goBack()
@@ -50,6 +54,24 @@ export function Profile() {
 
   function handleOptionChange(optionSelected: 'dataEdit' | 'passwordEdit') {
     setOption(optionSelected)
+  }
+
+  async function handleAvatarSelect() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1
+    })
+
+    if(result.cancelled) {
+      return
+    }
+
+    if(result.uri) {
+      setAvatar(result.uri)
+    }
+
   }
 
   return (
@@ -80,11 +102,11 @@ export function Profile() {
             </HeaderTop>
 
             <PhotoContainer>
-              <Photo 
-                source={{ uri: 'https://github.com/lilianmartinsfritzen.png'}}
-              />
+              { !!avatar && <Photo 
+                source={{ uri: avatar }}
+              />}
               <PhotoButton
-                onPress={() => {}}
+                onPress={handleAvatarSelect}
               >
                 <Feather 
                   name='camera'
@@ -130,6 +152,7 @@ export function Profile() {
                     placeholder='Nome'
                     autoCorrect={false}
                     defaultValue={user.name}
+                    onChangeText={setName}
                   />
                   <Input 
                     iconName='mail'
@@ -140,7 +163,8 @@ export function Profile() {
                     iconName='credit-card'
                     placeholder='CNH'
                     keyboardType='numeric'
-                    defaultValue={user.driver_license}            
+                    defaultValue={user.driver_license}
+                    onChangeText={setDriverLicense}         
                   />                    
                 </Section>
               :
