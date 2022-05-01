@@ -104,6 +104,23 @@ export function Profile() {
     }
   }
 
+  async function handleSignOut() {
+    Alert.alert(
+      'Tem certeza?',
+      'Lembre-se, ao se desconectar precisará de internet para conectar-se novamente',
+      [
+        {
+          text: 'Cancelar',
+          onPress: () => {}
+        },
+        {
+          text: 'Sair',
+          onPress: () => signOut()
+        }
+      ]
+    )
+  }
+
   return (
     <KeyboardAvoidingView
       behavior='position'
@@ -121,7 +138,7 @@ export function Profile() {
               />
               <HeaderTitle>Editar Perfil</HeaderTitle>
               <LogoutButton 
-                onPress={signOut}
+                onPress={handleSignOut}
               >
                 <Feather 
                   name='power'
