@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { StatusBar, StyleSheet } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
+import { Alert, StatusBar, StyleSheet } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { RectButton, PanGestureHandler } from 'react-native-gesture-handler'
 import { useNavigation, CommonActions } from '@react-navigation/native'
+import { useNetInfo } from '@react-native-community/netinfo'
+import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from 'styled-components'
 
 import Animated, {
@@ -31,9 +32,11 @@ import {
 const ButtonAnimated = Animated.createAnimatedComponent(RectButton)
 
 export function Home() {
-  const theme = useTheme()
   const [cars, setCars] = useState<CarDTO[]>([])
   const [loading, setLoading] = useState(true)
+
+  const theme = useTheme()
+  const netInfo = useNetInfo()
   const navigation = useNavigation()
 
   const positionY = useSharedValue(0)
@@ -106,6 +109,14 @@ export function Home() {
       isMounted = false
     }
   }, [])
+
+  useEffect(() => {
+    if(netInfo.isConnected) {
+      Alert.alert('Você está conectado à internet')
+    } else {
+      Alert.alert('Você está sem conexão')
+    }
+  }, [netInfo.isConnected])
 
   return (
     <Container>
