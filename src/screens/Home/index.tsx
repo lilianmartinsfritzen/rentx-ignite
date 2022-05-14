@@ -99,14 +99,10 @@ export function Home() {
         .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`)
         
         const { changes, latestVersion } = response.data
-        console.log('BACKEND PARA O APP')
-        console.log(changes)
         return { changes, timestamp: latestVersion }        
       },
       pushChanges: async ({ changes }) => {
         const user = changes.users
-        console.log('APP PARA O BACKEND')
-        console.log(changes)
         if (user.updated.length > 0) {
           await api.post('/users/sync', user)
         }
