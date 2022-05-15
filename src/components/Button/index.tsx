@@ -28,7 +28,7 @@ export function Button({
 
   return (
     <Container
-      color={color}
+      color={color ? color : theme.colors.main}
       onPress={onPress}
       enabled={enabled}
       style={{ opacity: (enabled === false || loading === true) ? .5 : 1 }}
