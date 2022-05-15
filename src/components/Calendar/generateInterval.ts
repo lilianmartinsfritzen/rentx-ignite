@@ -1,4 +1,4 @@
-import { eachDayOfInterval, format, parseISO } from 'date-fns'
+import { eachDayOfInterval, format } from 'date-fns'
 
 import { MarkedDateProps, DayProps } from '.'
 import { getPlatformDate } from '../../utils/getPlatformDate'
