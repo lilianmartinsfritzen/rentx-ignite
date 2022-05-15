@@ -1,9 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { Alert, StatusBar, StyleSheet } from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { StatusBar, StyleSheet } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { RectButton, PanGestureHandler } from 'react-native-gesture-handler'
-import { useNavigation, CommonActions } from '@react-navigation/native'
+import { useNavigation, CommonActions, useFocusEffect } from '@react-navigation/native'
 import { useNetInfo } from '@react-native-community/netinfo'
+
+import { synchronize } from '@nozbe/watermelondb/sync'
+import { database } from '../../database'
+import { Car as ModelCar } from '../../database/model/Car'
+import api from '../../services/api'
+
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from 'styled-components'
 
@@ -18,7 +24,6 @@ import { Car } from '../../components/Car'
 import { LoadAnimation } from '../../components/LoadAnimation'
 
 import { CarDTO } from '../../dtos/carDTO'
-import api from '../../services/api'
 import Logo from '../../assets/logo.svg'
 
 import {
@@ -32,12 +37,13 @@ import {
 const ButtonAnimated = Animated.createAnimatedComponent(RectButton)
 
 export function Home() {
-  const [cars, setCars] = useState<CarDTO[]>([])
+  const [cars, setCars] = useState<ModelCar[]>([])
   const [loading, setLoading] = useState(true)
 
   const theme = useTheme()
   const netInfo = useNetInfo()
   const navigation = useNavigation()
+  const synchronizing = useRef(false)
 
   const positionY = useSharedValue(0)
   const positionX = useSharedValue(0)
@@ -67,6 +73,14 @@ export function Home() {
     
   })
 
+  function handleOpenMyCars() {
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'MyCars'
+      })
+    )
+  }
+
   function handleCarDetails(car: CarDTO) {
     navigation.dispatch(
       CommonActions.navigate({
@@ -78,45 +92,70 @@ export function Home() {
     )
   }
 
-  function handleOpenMyCars() {
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'MyCars'
-      })
-    )
+  async function offlineSynchronize() {
+    await synchronize({
+      database,
+      pullChanges: async ({ lastPulledAt }) => {
+        const response = await api
+        .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`)
+        
+        const { changes, latestVersion } = response.data
+        return { changes, timestamp: latestVersion }        
+      },
+      pushChanges: async ({ changes }) => {
+        const user = changes.users
+        if (user.updated.length > 0) {
+          await api.post('/users/sync', user)
+        }
+      }
+    })
+    await fetchCars()
   }
+
+    async function fetchCars() {
+      try {
+        const carCollection = database.get<ModelCar>('cars')
+        const cars = await carCollection.query().fetch()
+        setCars(cars)
+
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setLoading(false)
+      }
+    }
 
   useEffect(() => {
     let isMounted = true
 
-    async function fetchCars() {
-      try {
-        const response = await api.get('/cars')
-        if(isMounted) {
-          setCars(response.data)
-        }
-      } catch (error) {
-        console.log(error)
-      } finally {
-        if(isMounted) {
-          setLoading(false)
-        }
-      }
+    if (isMounted) {
+      fetchCars()
     }
 
-    fetchCars()
     return () => {
       isMounted = false
     }
   }, [])
 
-  useEffect(() => {
-    if(netInfo.isConnected) {
-      Alert.alert('Você está conectado à internet')
-    } else {
-      Alert.alert('Você está sem conexão')
+  useFocusEffect(useCallback(() => {
+    const syncChanges = async () => {
+      if (netInfo.isConnected && !synchronizing.current) {
+        synchronizing.current = true
+
+        try {
+          await offlineSynchronize()
+        }
+        catch (err) {
+          console.log(err)
+        }
+        finally {
+          synchronizing.current = false
+        }
+      }
     }
-  }, [netInfo.isConnected])
+
+    syncChanges()
+  }, [netInfo.isConnected]))
 
   return (
     <Container>
@@ -139,6 +178,7 @@ export function Home() {
           }
         </HeaderContent>
       </Header>
+
       {loading ? <LoadAnimation /> :
         <CarList
           data={cars}

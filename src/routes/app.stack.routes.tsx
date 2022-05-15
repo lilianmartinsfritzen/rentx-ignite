@@ -1,5 +1,5 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack'
 
 import { Home } from '../screens/Home'
 import { MyCars } from '../screens/MyCars'
@@ -8,7 +8,7 @@ import { Scheduling } from '../screens/Scheduling'
 import { Confirmation } from '../screens/Confirmation'
 import { SchedulingDetails } from '../screens/SchedulingDetails'
 
-const { Navigator, Screen } = createNativeStackNavigator();
+const { Navigator, Screen } = createStackNavigator()
 
 export function AppStackRoutes() {
   return (

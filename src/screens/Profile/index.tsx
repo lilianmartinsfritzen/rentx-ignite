@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
@@ -8,6 +8,7 @@ import {
 
 import { useNavigation } from '@react-navigation/native'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
+import { useNetInfo } from '@react-native-community/netinfo'
 
 import * as Yup from 'yup'
 import * as ImagePicker from 'expo-image-picker'
@@ -20,6 +21,8 @@ import { BackButton } from '../../components/BackButton'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 import { PasswordInput } from '../../components/PasswordInput'
+
+import api from '../../services/api'
 
 import {
   Container,
@@ -39,20 +42,29 @@ import {
 
 export function Profile() {
   const { user, signOut, updatedUser } = useAuth()
-  const theme = useTheme()
-  const navigation = useNavigation()
 
   const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit')
   const [avatar, setAvatar] = useState(user.avatar)
   const [name, setName] = useState(user.name)
   const [driverLicense, setDriverLicense] = useState(user.driver_license)
+  const [password, setPassword] = useState('')
+  const [oldPassword, setOldPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+
+  const theme = useTheme()
+  const navigation = useNavigation()
+  const netInfo = useNetInfo()
 
   function handleBack() {
     navigation.goBack()
   }
 
   function handleOptionChange(optionSelected: 'dataEdit' | 'passwordEdit') {
-    setOption(optionSelected)
+    if (netInfo.isConnected === false && optionSelected === 'passwordEdit') {
+      Alert.alert('Você está Offline', 'Para mudar a senha conecte-se à internet.')
+    } else {
+      setOption(optionSelected)
+    }
   }
 
   async function handleAvatarSelect() {
@@ -83,6 +95,21 @@ export function Profile() {
       const data = { name, driverLicense }
       await schema.validate(data)
 
+      if (password !== confirmPassword) {
+        return Alert.alert(
+          'A nova senha e a senha de confirmação não são iguais!'
+        )
+      }
+
+      if (password && oldPassword) {
+        api
+          .put('users', {
+            password,
+            old_password: oldPassword,
+          })
+          .catch((error) => console.log(error))
+      }
+
       await updatedUser({
         id: user.id,
         user_id: user.user_id,
@@ -103,6 +130,10 @@ export function Profile() {
       }
     }
   }
+
+  useEffect(() => {
+    setAvatar(user.avatar)
+  }, [])
 
   async function handleSignOut() {
     Alert.alert(
@@ -219,14 +250,17 @@ export function Profile() {
               <PasswordInput 
                 iconName='lock'
                 placeholder='Senha atual'
+                onChangeText={setOldPassword}
               />
               <PasswordInput 
                 iconName='lock'
                 placeholder='Nova senha'
+                onChangeText={setPassword}
               />
               <PasswordInput 
                 iconName='lock'
                 placeholder='Repetir senha'
+                onChangeText={setConfirmPassword}
               />                    
             </Section>
             }

@@ -5,6 +5,7 @@ import React, {
   ReactNode,
   useEffect
 } from 'react'
+import { Alert } from 'react-native'
 
 import api from '../services/api'
 import { database } from '../database'
@@ -27,9 +28,11 @@ interface SignInCredentials {
 
 interface AuthContextData {
   user: User
+  isLogging: boolean
   signIn: (credentials: SignInCredentials) => Promise<void>
   signOut: () => Promise<void>
   updatedUser: (user: User) => Promise<void>
+  loading: boolean
 }
 
 interface AuthProviderProps {
@@ -43,20 +46,36 @@ function AuthProvider({
 }: AuthProviderProps) {
   
   const [data, setData] = useState<User>({} as User)
+  const [loading, setLoading] = useState(true)
+  const [isLogging, setIsLogging] = useState(false)
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
+      setIsLogging(true)
+
       const response = await api.post('/sessions', {
         email,
         password
       })
   
+      if (response.data.message === 'Email or password incorret!') {
+        setIsLogging(false);
+  
+        return Alert.alert(
+          'Erro na autenticação',
+          'E-mail ou usuário inválido!'
+        )
+      }
+  
+      setIsLogging(false);
+
       const { token, user } = response.data  
-      api.defaults.headers.common['Autorization'] = `Bearer ${token}`
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`
       
       const userCollection = database.get<ModelUser>('users')
       await database.write(async () => {
         await userCollection.create(( newUser ) => {
+          newUser.id = newUser.id, 
           newUser.user_id = user.id
           newUser.name = user.name
           newUser.email = user.email
@@ -64,6 +83,16 @@ function AuthProvider({
           newUser.avatar = user.avatar
           newUser.token = token
         })
+          .then((userData) => {
+            setData(userData._raw as unknown as User)
+          })
+          .catch(() => {
+            setIsLogging(false)
+            return Alert.alert(
+              'Erro na autenticação',
+              'Não foi possível realizar o login!'
+            )
+          })
       })
 
       setData({ ...user, token })
@@ -116,8 +145,9 @@ function AuthProvider({
 
       if(response.length > 0) {
         const userData = response[0]._raw as unknown as User
-        api.defaults.headers.common['Autorization'] = `Bearer ${userData.token}`
+        api.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`
         setData(userData)
+        setLoading(false)
       }
     }
 
@@ -128,9 +158,11 @@ function AuthProvider({
     <AuthContext.Provider
       value={{
         user: data,
+        isLogging,
         signIn,
         signOut,
-        updatedUser
+        updatedUser,
+        loading
       }}
     >
       {children}

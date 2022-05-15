@@ -1,13 +1,12 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack'
 
-import { Splash } from '../screens/Splash'
+import { Confirmation } from '../screens/Confirmation'
 import { SignIn } from '../screens/SignIn'
 import { SignUpFirstStep } from '../screens/SignUp/SignUpFirstStep'
 import { SignUpSecondStep } from '../screens/SignUp/SignUpSecondStep'
-import { Confirmation } from '../screens/Confirmation'
 
-const { Navigator, Screen } = createNativeStackNavigator();
+const { Navigator, Screen } = createStackNavigator()
 
 export function AuthRoutes() {
   return (
@@ -15,10 +14,6 @@ export function AuthRoutes() {
       screenOptions={{ headerShown: false }}
       initialRouteName='Splash'
     >
-      <Screen
-        name='Splash'
-        component={Splash}
-      />
       <Screen
         name='SignIn'
         component={SignIn}
