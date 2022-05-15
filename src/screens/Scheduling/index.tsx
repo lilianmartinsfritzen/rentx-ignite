@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Alert } from 'react-native'
-import { useTheme } from 'styled-components'
+import { StatusBar } from 'react-native'
 import { useNavigation, CommonActions, useRoute } from '@react-navigation/native'
+import { useTheme } from 'styled-components'
 import { format } from 'date-fns'
 
 import { BackButton } from '../../components/BackButton'
@@ -59,7 +59,7 @@ export function Scheduling() {
   const route = useRoute()
   const { car } = route.params as Params
 
-  function handleScheduling() {
+  function handleConfirmRental() {
     navigation.dispatch(
       CommonActions.navigate({
         name: 'SchedulingDetails',
@@ -102,6 +102,11 @@ export function Scheduling() {
   return (
     <Container>
       <Header>
+      <StatusBar
+          barStyle="light-content"
+          translucent
+          backgroundColor="transparent"
+        />
         <BackButton
           onPress={handleBack}
           color={theme.colors.shape}
@@ -146,7 +151,7 @@ export function Scheduling() {
       <Footer>
         <Button
           title='Confirmar'
-          onPress={handleScheduling}
+          onPress={handleConfirmRental}
           enabled={!!rentalPeriod.startFormatted}
         />
       </Footer>

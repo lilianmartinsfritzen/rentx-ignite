@@ -19,6 +19,8 @@ import { Button } from "../../components/Button";
 import { getAccessoryIcon } from "../../utils/getAccessoryIcon";
 import { getPlatformDate } from "../../utils/getPlatformDate";
 
+import { useAuth } from "../../hooks/auth";
+
 import { CarDTO } from "../../dtos/carDTO";
 
 import api from "../../services/api";
@@ -67,6 +69,7 @@ export function SchedulingDetails() {
   const [carUpdated, setCarUpdated] = useState<CarDTO>({} as CarDTO);
   const [loading, setLoading] = useState(true);
 
+  const { user } = useAuth()
   const theme = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
@@ -75,16 +78,23 @@ export function SchedulingDetails() {
   const { car, dates } = route.params as Params;
   const rentTotal = Number(dates.length * car.price);
 
-  async function handleRentNow() {
+  function handleBack() {
+    navigation.goBack();
+  }
+
+  async function handleConfirmRental() {
     setLoading(true);
 
     await api
       .post('rentals', {
-        user_id: 1,
+        user_id: user.id,
         car_id: car.id,
         start_date: new Date(dates[0]),
         end_date: new Date(dates[dates.length - 1]),
-        total: rentTotal,
+        total: rentTotal
+      },
+      {
+        headers: { authorization: `Bearer ${user.token}`}
       })
       .then(() =>
         navigation.dispatch(
@@ -99,14 +109,11 @@ export function SchedulingDetails() {
         )
       )
       .catch((error) => {
+        Alert.alert("Não foi possível confirmar o agendamento.");
         console.log('CATCH',error)
         setLoading(false);
-        Alert.alert("Não foi possível confirmar o agendamento.");
+        throw new Error((error as Error).message);
       });
-  }
-
-  function handleBack() {
-    navigation.goBack();
   }
 
   useEffect(() => {
@@ -212,7 +219,7 @@ export function SchedulingDetails() {
         <Button
           title="Alugar agora"
           color={theme.colors.success}
-          onPress={handleRentNow}
+          onPress={handleConfirmRental}
           enabled={!loading}
           loading={loading}
         />

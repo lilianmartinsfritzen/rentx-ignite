@@ -62,7 +62,6 @@ export function CarDetails() {
   const scrollY = useSharedValue(0);
   const scrollHandler = useAnimatedScrollHandler((event) => {
     scrollY.value = event.contentOffset.y;
-    console.log(event.contentOffset.y);
   });
 
   const headerStyleAnimation = useAnimatedStyle(() => {
@@ -82,7 +81,7 @@ export function CarDetails() {
     };
   });
 
-  function handleChoosePeriod() {
+  function handleConfirmRental() {
     navigation.dispatch(
       CommonActions.navigate({
         name: "Scheduling",
@@ -185,7 +184,7 @@ export function CarDetails() {
       <Footer>
         <Button
           title="Escolher período do aluguel"
-          onPress={handleChoosePeriod}
+          onPress={handleConfirmRental}
           enabled={netInfo.isConnected === true}
         />
 
