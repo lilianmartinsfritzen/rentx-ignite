@@ -92,9 +92,6 @@ export function SchedulingDetails() {
         start_date: new Date(dates[0]),
         end_date: new Date(dates[dates.length - 1]),
         total: rentTotal
-      },
-      {
-        headers: { authorization: `Bearer ${user.token}`}
       })
       .then(() =>
         navigation.dispatch(
