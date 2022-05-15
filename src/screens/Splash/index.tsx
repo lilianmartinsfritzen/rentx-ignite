@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
-import { CommonActions, useNavigation } from '@react-navigation/native'
-
+import { StackActions, useNavigation } from '@react-navigation/native'
 
 import BrandSvg from '../../assets/brand.svg'
 import LogoSvg from '../../assets/logo.svg'
@@ -9,7 +8,6 @@ import Animated, {
   useSharedValue, 
   useAnimatedStyle,
   withTiming,
-  Easing,
   interpolate,
   Extrapolate,
   runOnJS
@@ -25,11 +23,7 @@ export function Splash() {
   const navigation = useNavigation()
 
   function startApp() {
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'SignIn'
-      })
-    )
+    navigation.dispatch(StackActions.replace('Home'))
   }
 
   const brandStyle = useAnimatedStyle(() => {
@@ -63,14 +57,20 @@ export function Splash() {
   })
 
   useEffect(() => {
+    let mounted = true;
+
     splashAnimation.value = withTiming(
       50, 
       { duration: 2000 },
       () => {
-        'worklet'
-        runOnJS(startApp)()
+        if (mounted) {
+          'worklet'
+          runOnJS(startApp)()
+        }
       }
     )
+
+    return () => { mounted = false }
   }, [])
 
   return (

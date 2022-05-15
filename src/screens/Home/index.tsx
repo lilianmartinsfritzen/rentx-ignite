@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { StatusBar, StyleSheet } from 'react-native'
 import { RFValue } from 'react-native-responsive-fontsize'
 import { RectButton, PanGestureHandler } from 'react-native-gesture-handler'
-import { useNavigation, CommonActions } from '@react-navigation/native'
+import { useNavigation, CommonActions, useFocusEffect } from '@react-navigation/native'
 import { useNetInfo } from '@react-native-community/netinfo'
 
 import { synchronize } from '@nozbe/watermelondb/sync'
@@ -43,6 +43,7 @@ export function Home() {
   const theme = useTheme()
   const netInfo = useNetInfo()
   const navigation = useNavigation()
+  const synchronizing = useRef(false)
 
   const positionY = useSharedValue(0)
   const positionX = useSharedValue(0)
@@ -72,6 +73,14 @@ export function Home() {
     
   })
 
+  function handleOpenMyCars() {
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'MyCars'
+      })
+    )
+  }
+
   function handleCarDetails(car: CarDTO) {
     navigation.dispatch(
       CommonActions.navigate({
@@ -79,14 +88,6 @@ export function Home() {
         params: {
           car
         }
-      })
-    )
-  }
-
-  function handleOpenMyCars() {
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'MyCars'
       })
     )
   }
@@ -108,40 +109,53 @@ export function Home() {
         }
       }
     })
+    await fetchCars()
   }
-
-  useEffect(() => {
-    let isMounted = true
 
     async function fetchCars() {
       try {
         const carCollection = database.get<ModelCar>('cars')
         const cars = await carCollection.query().fetch()
+        setCars(cars)
 
-        if(isMounted) {
-          setCars(cars)
-        }
       } catch (error) {
         console.log(error)
       } finally {
-        if(isMounted) {
-          setLoading(false)
-        }
+        setLoading(false)
       }
     }
 
-    fetchCars()
+  useEffect(() => {
+    let isMounted = true
+
+    if (isMounted) {
+      fetchCars()
+    }
+
     return () => {
       isMounted = false
     }
   }, [])
 
-  useEffect(() => {
-    if (netInfo.isConnected === true) {
-      offlineSynchronize()
+  useFocusEffect(useCallback(() => {
+    const syncChanges = async () => {
+      if (netInfo.isConnected && !synchronizing.current) {
+        synchronizing.current = true
+
+        try {
+          await offlineSynchronize()
+        }
+        catch (err) {
+          console.log(err)
+        }
+        finally {
+          synchronizing.current = false
+        }
+      }
     }
 
-  }, [netInfo.isConnected])
+    syncChanges()
+  }, [netInfo.isConnected]))
 
   return (
     <Container>

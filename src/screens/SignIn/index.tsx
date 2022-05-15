@@ -28,14 +28,12 @@ import {
 } from './styles'
 
 export function SignIn() {
-
-  const theme = useTheme()
-
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const theme = useTheme()
   const navigation = useNavigation()
-  const { signIn } = useAuth()
+  const { signIn, isLogging } = useAuth()
 
   async function handleSignIn() {
     try {
@@ -116,8 +114,8 @@ export function SignIn() {
             <Button 
               title='Login'
               onPress={handleSignIn}
-              enabled={true}
-              loading={false}
+              enabled={!isLogging}
+              loading={isLogging}
             />
             <Button 
               title='Criar conta gratuita'
