@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="#CHAPTERIII">CHAPTER III</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#CHAPTERIII">CHAPTER III - IV</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#requisitos">Requisitos</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#I">I</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -21,7 +21,7 @@
 </p>
 
 <h2 align="center"> 
-  <img src="https://user-images.githubusercontent.com/83084256/180630928-a914ddb1-38c9-4d0e-bc35-fd3e532fad3e.png" width="60" height="30" style="border-radius: 18px"/> 
+  <img src="https://user-images.githubusercontent.com/83084256/180630928-a914ddb1-38c9-4d0e-bc35-fd3e532fad3e.png" width="60" height="30"/> 
   RentX 
 </h2>
 <br>
@@ -32,17 +32,17 @@
 </div>
 <br>
 
-<h2 id="CHAPTERII">
-  🚀 CHAPTER II - IGNITE <a href="https://www.rocketseat.com.br/">Rocketseat
+<h2 id="CHAPTERIII">
+  🚀 CHAPTER III e IV - IGNITE <a href="https://www.rocketseat.com.br/">Rocketseat
 </a>
 </h2>
-<br>
+
 <div align="justify">
 
-<h2> 📝 Conceitos aprendidos na construção da aplicação</h2>
+<h2> 📝 Conceitos aprendidos durante a construção da aplicação</h2>
 <br>
 
-> Consumo de API, métodos HTTP, lidar com requisições e respostas, criar animações e entender sobre boas práticas de User Experience e sobre o universo Offline First.
+> Consumo de API, métodos HTTP, lidar com requisições e respostas, criar animações, entender sobre boas práticas de User Experience e sobre o universo Offline First.
 
 <br>
 <hr>
@@ -129,7 +129,6 @@
 
 <hr>
 
-<br>
 <h2 id="tecnologias">🛠 Tecnologias e Ferramentas</h2>
 
 - <img src="https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white"/>
@@ -157,7 +156,8 @@ npm install
 # Para aproveitar o ecossistema Expo use o comando abaixo e selecione o emulador desejado
 expo start
 
-# O template selecionado permite o uso dos comandos abaixo, caso alguma implementação adicional ainda não tenha integração com o Expo
+# O template Expo selecionado permite o uso dos comandos abaixo
+# Será necessário ao lidar com o banco de dados WatermelonDB
 
 # Executar o projeto Android
 npx react-native run-android && npm start
