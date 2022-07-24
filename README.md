@@ -171,7 +171,7 @@ npx react-native run-ios && npm start
 ```
 
 <h2 id="api">🕹 RentX API</h2>
-Para ter uma XXXX completa da aplicação clone também a API consumida pela a aplicação mobile RentX.
+Para ter uma experiência completa sobre a aplicação, clone também a API que utilizamos para consumir as informações do usuário, carros e agendamento.
 
 Link do repositório: <a href="https://github.com/lilianmartinsfritzen/rentx-api-ignite">rentx-api-ignite</a>
 
